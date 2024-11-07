@@ -90,7 +90,8 @@ function drawPerlinNoiseFrames(x, y, w, h, baseColor) {
     //Draw wireframe based on shrinking scale
     rect(x + offsetX, y + offsetY, w * scale, h * scale); 
   }
-   
+    //Update frame offset for continuous animation effect
+    frameOffset += 0.02; 
 }
 
 function windowResized() {
