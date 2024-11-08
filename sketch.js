@@ -1,9 +1,8 @@
-
 let frames = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  // create four frames with noise animation and add to the frames array
+  //create four frames with noise animation and add them to the frames array
   frames.push(new NoisyFrame(0.037 * min(width, height), 0.186 * min(width, height), 0.125 * min(width, height), 0.2 * min(width, height), color(239, 17, 17)));
   frames.push(new NoisyFrame(0.625 * min(width, height), 0.15 * min(width, height), 0.125 * min(width, height), 0.2 * min(width, height), color(43, 115, 247)));
   frames.push(new NoisyFrame(0.138 * min(width, height), 0.725 * min(width, height), 0.2 * min(width, height), 0.125 * min(width, height), color(211, 211, 211)));
@@ -14,14 +13,14 @@ function setup() {
 function draw() {
   background(255);
   drawRandomLines();
-  
+  //display each frame with noise animation
   for (let frame of frames) {
     frame.display(); 
   }
 
-  //create random rects in random position
-  randomRect(); 
-  //draw colored road at specific positions
+ 
+  randomRect();
+  //draw colored roads at specific position
   drawColouredHorizontalRoad(min(width, height) / 40 * 21);
   drawColouredVerticalRoad(min(width, height) / 40 * 1);
   drawColouredVerticalRoad(min(width, height) / 40 * 23);
@@ -30,6 +29,7 @@ function draw() {
   drawColouredHorizontalRoad(min(width, height) / 40 * 37);
 }
 
+// Function to draw random lines as the yellow grid background
 function drawRandomLines() {
   let size = min(windowWidth, windowHeight);
   stroke(252, 224, 46);
@@ -56,16 +56,16 @@ function drawRandomLines() {
   }
 }
 
-//function to create random rects and avoid overlaping with fixed rects
+// draw random rectangles and avoid overlapping with the fixed rectangles
 function randomRect() {
   let size = min(windowWidth, windowHeight);
   let colors = [
-    [239, 17, 17],  // red
-    [43, 115, 247], // blue
-    [211, 211, 211] // gray
+    [239, 17, 17],  
+    [43, 115, 247], 
+    [211, 211, 211] 
   ];
 
-  // fixed rects
+  //fixed rectangles with specific positions and sizes
   let fixedRects = [
     { x: 0.037 * size, y: 0.186 * size, w: 0.125 * size, h: 0.2 * size },
     { x: 0.625 * size, y: 0.15 * size, w: 0.125 * size, h: 0.2 * size },
@@ -73,25 +73,28 @@ function randomRect() {
     { x: 0.7 * size, y: 0.7 * size, w: 0.175 * size, h: 0.225 * size }
   ];
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 7; i++) {
     let rectSize = random(20, 80);
     let x, y;
     let overlapping = true;
-
-    
+ 
+    //make sure random rectangles will not overlap with the fixed rectangles
     while (overlapping) {
+      //create random x and y coordinates
       x = random(0, size - 70);
       y = random(0, size - 70);
       overlapping = false;
- 
-      // make sure the random rects will not overlap with the fixed rects
-      for (let rect of fixedRects) {
-        let horizontalOverlap = x < rect.x + rect.w && x + rectSize > rect.x;
-        let verticalOverlap = y < rect.y + rect.h && y + rectSize > rect.y;
 
+      //check for overlap with each fixed rectangle
+      for (let rect of fixedRects) {
+        //check if the new rectangle horizontally overlaps with the fixed rect
+        let horizontalOverlap = x < rect.x + rect.w && x + rectSize > rect.x;
+        //check if the new rectangle vertically overlaps with the fixed rect
+        let verticalOverlap = y < rect.y + rect.h && y + rectSize > rect.y;
+        //if both horizontal and vertical overlaps exist, mark as overlapping
         if (horizontalOverlap && verticalOverlap) {
-          // regenerate new position if overlapping
           overlapping = true;
+          //exit the loop to generate a new position
           break;
         }
       }
@@ -104,8 +107,7 @@ function randomRect() {
   }
 }
 
-  
-//class for noisy frame
+// Class for the noisy frames
 class NoisyFrame {
   constructor(x, y, w, h, baseColor) {
     this.x = x;
@@ -114,32 +116,31 @@ class NoisyFrame {
     this.h = h;
     this.baseColor = baseColor;
     //randomly initialize noise offset
-    this.noiseOffset = random(10); 
+    this.noiseOffset = random(100);
   }
 
   display() {
     fill(this.baseColor);
     noStroke();
     rect(this.x, this.y, this.w, this.h);
-    //draw dynamic wireframe in the rectangle
     this.drawNoisyFrames();
-    //increase noise offset to create an animation effect
+    //slightly increment noise offset for animation
     this.noiseOffset += 0.01;
   }
 
+  //draw multiple wireframes with noise effect to create animation
   drawNoisyFrames() {
     noFill();
     stroke(255, 255, 255, 150);
     strokeWeight(1);
-    //the number of shrinking wireframes
+
+    //create the number of noise effect frames to overlay
     let steps = 33;
 
-    this.noiseOffset += 0.0009;
-    //use setInterval to call display() 60 times per second
-    setInterval(() => this.display(), 60);
-
     for (let i = 0; i < steps; i++) {
+      //generate noise values
       let noiseValue = noise(this.noiseOffset + i * 0.1);
+      //make a scale range
       let scale = map(noiseValue, 0, 1, 1, 0.05);
       let offsetX = (this.w * (1 - scale)) / 2;
       let offsetY = (this.h * (1 - scale)) / 2;
@@ -149,7 +150,58 @@ class NoisyFrame {
   }
 }
 
-//resize the canvas to fit the new window size when the window is resized
+// Draw small squares with colors on horizontal lines
+function drawColouredHorizontalRoad(y){
+  let boxSize = min(width, height) / 40;
+  let boxNumbers = min(width, height) / boxSize;
+  let colourChoice;
+  for (let i = 0; i < boxNumbers; i ++){
+    let x = i * boxSize;
+    if(i % 2 === 0){
+      colourChoice = color(252, 224, 46); 
+    } else if (i % 6 == 1 || i % 6 == 5){
+      //70% chance to be yellow, otherwise gray
+      if(random(1) < 0.7){
+        colourChoice = color(252, 224, 46); // yellow
+      } else {
+        colourChoice = color(211, 211, 211); // gray
+      }
+    } else {
+      colourChoice = random([color(239, 17, 17), color(43, 115, 247)]);
+    }
+
+    fill(colourChoice);
+    noStroke();
+    rect(x, y, boxSize, boxSize);
+  }
+}
+
+// Draw small squares with colors on vertical lines
+function drawColouredVerticalRoad(x){
+  let boxSize = min(width, height) / 40;
+  let boxNumbers = min(width, height) / boxSize;
+  let colourChoice;
+  for (let i = 0; i < boxNumbers; i ++){
+    let y = i * boxSize;
+    if(i % 2 === 0){
+      colourChoice = color(252, 224, 46); // yellow
+    } else if (i % 6 == 1 || i % 6 == 5){
+      if(random(1) < 0.7){
+        colourChoice = color(252, 224, 46); // yellow
+      } else {
+        colourChoice = color(211, 211, 211); // gray
+      }
+    } else {
+      colourChoice = random([color(239, 17, 17), color(43, 115, 247)]);
+    }
+
+    fill(colourChoice);
+    noStroke();
+    rect(x, y, boxSize, boxSize);
+  }
+}
+
+//the size of prototype will change according to the browser window resized
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   frames = [
