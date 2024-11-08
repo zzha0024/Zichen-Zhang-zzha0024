@@ -4,6 +4,7 @@
 ### 1 Instructions on how to interact with the work
 ![An image of individual work](<indivial work.png>)
 <video controls src="individual work2.mp4" title="Title"></video>
+
 Each time the page is refreshed, the four fixed rectangles wireframes show a regular change. When we resize the page by dragging the window, the wireframes inside the rectangles also display a dynamic animation effect.
 
 
@@ -21,6 +22,7 @@ Each time the page is refreshed, the four fixed rectangles wireframes show a reg
   
 - Inspiratiaon 
 ![An image of inspirations](inspirations.png)
+
  My inspiration came from the example in part 2 of week9's tutorial. Based on this, I used Perlin noise to create layered wireframe effects in the four fixed rectangles, showing a regular change each time the page is refreshed. When resizng the page, the wireframes within the fixed rectangles can produce a dynamic effect. This dynamic  represents the crisscrossing of the city, with pedestrians, buildings, and facilities changing over time. Although the appearance of some buildings remains constant, seemingly untouched by time, their internal structures quietly adapt and adjust, subtly evolving with the passage of years. 
 
 
